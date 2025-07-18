@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 """
 
 from pathlib import Path
+from celery.schedules import crontab
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -39,6 +40,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'core',  # Your core app
     'corsheaders',  # CORS headers for API
+    'rest_framework', # Django REST Framework
 ]
 
 MIDDLEWARE = [
@@ -139,3 +141,10 @@ CELERY_ACCEPT_CONTENT = ['json']
 CELERY_TASK_SERIALIZER = 'json'
 CELERY_RESULT_SERIALIZER = 'json'
 CELERY_TIMEZONE = 'UTC'
+
+CELERY_BEAT_SCHEDULE = {
+    'update-cryptos-every-5-minutes': {
+        'task': 'core.tasks.update_cryptos',
+        'schedule': crontab(minute='*/5'),
+    },
+}

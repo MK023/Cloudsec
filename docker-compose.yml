@@ -33,7 +33,7 @@ services:
       - postgres
       - redis
     ports:
-      - "8001:8000"
+      - "8000:8000"
     restart: unless-stopped
 
   celery:
