@@ -1,6 +1,12 @@
 import os
 from celery import Celery
 
+import multiprocessing
+try:
+    multiprocessing.set_start_method('spawn')
+except RuntimeError:
+    pass
+
 # Ensure the Django settings module is set before importing Django
 # This is necessary for Celery to work correctly with Django.
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'core.settings')
