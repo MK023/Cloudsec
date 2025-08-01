@@ -1,4 +1,4 @@
-## Stato al 2025-07-30
+## Stato al 2025-08-01
 
 ### ✅ Componenti attivi e aggiornati
 - **Frontend (React):** accessibile su [http://localhost:3002](http://localhost:3002) (modalità sviluppo, webpack funzionante)
@@ -43,39 +43,97 @@
 
 ## 🚦 Cosa puoi fare ora (workflow suggerito)
 
-### 🔹 1. Estendere il modello dati
-- Aggiungi nuovi modelli Django per:
-  - **News** (notizie finanziarie/crypto)
-  - **Analisi tecnica/fondamentale**
-  - **Alert, segnali, preferenze utenti, portafogli, ecc.**
-- Gestisci relazioni tra CryptoCurrency, News, Analisi, ecc.
+**Integrazione roadmap aggiornata con i 10 punti chiave per evoluzione piattaforma (fintech monitoring, AI, multi-asset, news):**
 
-### 🔹 2. Nuovi task Celery
-- Scrivi task per:
-  - **Fetch periodico di news** da API (es: CryptoPanic, NewsAPI, Finnhub, ecc.)
-  - **Analisi tecnica** (es: calcolo indicatori su prezzi storici)
-  - **Analisi fondamentale** (es: sentiment analysis sulle news)
-  - **Notifiche/alert** agli utenti
-  - **Pulizia dati, backup, sincronizzazione**
+---
 
-### 🔹 3. Integrazione API di news esterne
-- Scegli e integra una o più API (CryptoPanic, NewsAPI, Finnhub, Yahoo Finance, ecc.)
-- Crea task periodici per aggiornare le notizie e salvarle nel nuovo modello News
-- Collega le notizie alle crypto e aggiungi eventuale sentiment analysis
+### 1. Identità e Obiettivo
+- **Visione:** Monitoring multi-asset (crypto, forex, ETF, azioni) totalmente gratuito, analisi tecnica, fondamentale, news e AI integrata.
+- **Target:** Utenti retail, curiosi, investitori “smart”, community di appassionati.
 
-### 🔹 4. Espansione API/Frontend
-- Espandi le API REST per esporre nuovi dati (news, analisi, alert…)
-- Integra le nuove funzionalità lato frontend React
+---
 
-### 🔹 5. Monitoring e automazione
-- Usa Flower per monitorare i task e il carico Celery
-- Documenta e automatizza ancora di più il setup (es: script di avvio, backup, test automatici)
+### 2. Architettura dati
+- **Modello unico “Asset”** oppure modelli separati (es: Crypto, Forex, ETF, Equity)
+- **Campi comuni:** nome, simbolo, tipo, mercato, prezzo, volumi, storico, trend, score, fonti
+- **Campi specifici:** on-chain data per crypto, bilanci per equity/ETF, coppie per forex
+- **Storicizzazione:** dati principali + storico essenziale (OHLC, volumi, sentiment, news)
+- **Cache e rate limit:** gestione fonti gratuite, caching Redis per richieste frequenti
+
+---
+
+### 3. Fonti dati (solo gratuite)
+- **Crypto:** CoinGecko, CoinPaprika
+- **Forex:** AlphaVantage, Yahoo Finance (yfinance)
+- **ETF/Azioni:** Yahoo Finance/yfinance, Finnhub free tier
+- **News:** Google News API, RSS, Twitter/Reddit scraping (dove permesso)
+- **Sentiment:** analisi testuale su news/social; API e scraping solo se free
+
+---
+
+### 4. Backend intelligente
+- **Scheduler Celery/Beat:** aggiornamento asset/news con frequenza variabile
+- **Algoritmi:** ranking, scoring, alert, correlazioni, “discovery” asset promettenti
+- **AI (Copilot/GPT):** analisi news, sentiment, scoring, report automatici, generazione idee di investimento
+- **API REST/GraphQL:** modularità, endpoint estesi per frontend, partner, export
+
+---
+
+### 5. Analisi tecnica e fondamentale
+- **Tecnica:** indicatori open source (TA-Lib, pandas_ta), pattern, alert, backtesting
+- **Fondamentale:** bilanci, metriche finanziarie, on-chain data, rating
+- **AI:** sintesi automatica, spiegazioni, report, ranking
+
+---
+
+### 6. News & Sentiment
+- **Feed aggregati:** notizie, social, blog
+- **Sentiment analysis:** score automatici, alert su trend/emergenze
+- **AI:** sintesi, riepiloghi, classificazione eventi
+
+---
+
+### 7. Governance e gestione asset
+- **Lista asset principale:** solo i più rilevanti, aggiornata dinamicamente
+- **Discovery:** watchlist, segnalazione utenti, algoritmo per emergenti
+- **Community voting:** votazione asset, news, idee
+- **Revisione periodica:** update lista asset, log e audit trail
+
+---
+
+### 8. Scalabilità e modularità
+- **Database unico o separato:** pro/contro valutati, ora modello unico con tabelle specifiche per asset diversi
+- **Microservizi vs monolite:** per ora monolite Django, microservizi valutabili in futuro
+
+---
+
+### 9. Pubblicazione e branding
+- **Piattaforma gratuita:** nessun paywall, nessuna licenza a pagamento per dati
+- **Monetizzazione futura:** da valutare (adv, API premium, community, plugin)
+- **Open Source:** possibilità di rendere il progetto collaborativo
+- **UX/UI:** dashboard, alert, comparazione, export, personalizzazione (in roadmap)
+
+---
+
+### 10. Compliance & Legal
+- **Rispetto policy fonti:** scraping solo dove permesso, attenzione a ToS
+- **Privacy:** gestione dati utenti se prevista community o account
+
+---
+
+## 🔹 Step operativi da riprendere lunedì
+
+- **Estendere il modello dati**: Django models per News, Analisi tecnica/fondamentale, Alert, Preferenze utente, Portafogli, etc.
+- **Task Celery avanzati**: fetch news, analisi tecnica/fondamentale, alert, notifiche, backup, pulizia dati
+- **Collegamento asset-news-analisi**: relazioni tra modelli, esempio Crypto <-> News <-> Analisi
+- **Integrazione AI Copilot/GPT**: workflow per scoring, analisi, generazione report e idee
+- **Espansione API REST**: endpoint per news, analisi, alert, asset discovery
+- **Ottimizzazione caching/aggiornamento**: gestire limiti API gratuite, caching Redis, update intelligente
+- **Documentazione e workflow**: aggiornare questa pagina dopo ogni milestone tecnica
 
 ---
 
 ## ⚡️ Comandi utili per sviluppo locale (senza Docker)
-
-Lanciare da terminale, dalla root del backend (dove c’è `manage.py`):
 
 ```bash
 # Avvia server Django (porta 8000)
@@ -90,20 +148,16 @@ celery -A core worker -l info --pool=solo
 # Avvia Celery Beat (scheduler periodico)
 celery -A core beat -l info --scheduler django_celery_beat.schedulers:DatabaseScheduler
 ```
-
 > 🔹 Sostituisci `core` con il nome della tua app Celery principale se differente.
 
 ---
 
-🔥💥 BOOM!  
+🔥💥 **BOOM!**  
 Hai ora un'infrastruttura **pro** pronta per crescere: Django + Celery + Beat + Redis + PostgreSQL + Flower + React + Portainer orchestrati in Docker Compose!  
 🚀🚀🚀
 
-**Prossimi step:**  
-Espandi i modelli, integra le news, aggiungi task avanzati e… scala verso una piattaforma fintech di livello! 😎
+> **Per Copilot o altri collaboratori:**  
+> Riprendere da qui per sviluppo, test e debugging.  
+> **Tenere traccia degli step svolti e aggiornare questo documento dopo ogni milestone.**
 
 ---
-
-> **Per Copilot o altri collaboratori:**  
-> Riprendere da qui per sviluppo, test e debugging!  
-> Tenere traccia degli step svolti e aggiornare questa pagina dopo ogni milestone.

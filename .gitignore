@@ -1,24 +1,73 @@
 # See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
 
-# dependencies
-/node_modules
-/.pnp
-.pnp.js
-
-# testing
-/coverage
-
-# production
-/build
-
-# misc
-.DS_Store
-.env.local
-.env.development.local
-.env.test.local
-.env.production.local
-.env*
-
+# Node/React dependencies & build
+node_modules/
+build/
+coverage/
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+.pnp/
+.pnp.js
+
+# Python/Django
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.pyc
+*.egg-info/
+*.egg
+db.sqlite3
+
+# Django static & media
+static/
+staticfiles/
+media/
+uploads/
+*.sqlite3
+
+# Env files
+.env
+.env.*
+.env.local
+.env.development
+.env.development.local
+.env.test
+.env.test.local
+.env.production
+.env.production.local
+
+# Docker
+*.pid
+*.seed
+*.bak
+*.swp
+*.tmp
+*.log
+docker-compose.override.yml
+
+# PostgreSQL/Redis data (if running locally)
+pgdata/
+redis-data/
+
+# OS/IDE files
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+*.sublime-workspace
+*.sublime-project
+
+# Celery/Flower
+celerybeat-schedule
+flower.db
+
+# Portainer
+portainer_data/
+
+# Misc
+*.envrc
+*.secret
+*.bak
+*.orig

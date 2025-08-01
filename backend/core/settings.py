@@ -102,6 +102,7 @@ USE_TZ = True
 
 # -- Static files --
 STATIC_URL = 'static/'
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
@@ -113,9 +114,18 @@ CELERY_TASK_SERIALIZER = 'json'
 CELERY_RESULT_SERIALIZER = 'json'
 CELERY_TIMEZONE = 'UTC'
 
+# -- Celery Beat schedule --
 CELERY_BEAT_SCHEDULE = {
-    'update-cryptos-every-5-minutes': {
-        'task': 'core.tasks.update_cryptos',
-        'schedule': crontab(minute='*/5'),
+    # Aggiorna la lista crypto ogni ora alle xx:05 UTC
+    'update-crypto-list-hourly': {
+        'task': 'core.celery_tasks.crypto_list.update_crypto_list',
+        'schedule': crontab(minute=5),
+        'options': {'queue': 'default'},
+    },
+    # Aggiorna i dati crypto ogni ora alle xx:10 UTC
+    'update-cryptos-hourly': {
+        'task': 'core.celery_tasks.crypto_sync.update_cryptos',
+        'schedule': crontab(minute=10),
+        'options': {'queue': 'default'},
     },
 }

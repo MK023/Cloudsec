@@ -1,0 +1,5 @@
+# Forza LF su tutti i file Markdown
+*.md text eol=lf
+
+# Forza LF su tutti i file di testo
+* text=auto eol=lf
