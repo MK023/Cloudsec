@@ -115,17 +115,19 @@ CELERY_RESULT_SERIALIZER = 'json'
 CELERY_TIMEZONE = 'UTC'
 
 # -- Celery Beat schedule --
+from celery.schedules import crontab
+
 CELERY_BEAT_SCHEDULE = {
     # Aggiorna la lista crypto ogni ora alle xx:05 UTC
     'update-crypto-list-hourly': {
         'task': 'core.celery_tasks.crypto_list.update_crypto_list',
-        'schedule': crontab(minute=5),
+        'schedule': crontab(minute=5),  # ogni ora alle 5 minuti
         'options': {'queue': 'default'},
     },
     # Aggiorna i dati crypto ogni ora alle xx:10 UTC
     'update-cryptos-hourly': {
         'task': 'core.celery_tasks.crypto_sync.update_cryptos',
-        'schedule': crontab(minute=10),
+        'schedule': crontab(minute=10),  # ogni ora alle 10 minuti
         'options': {'queue': 'default'},
     },
 }

@@ -11,3 +11,18 @@ class CryptoCurrency(models.Model):
 
     def __str__(self):
         return f"{self.name} ({self.symbol})"
+
+class News(models.Model):
+    title = models.CharField(max_length=300)
+    source = models.CharField(max_length=100)
+    author = models.CharField(max_length=100, blank=True, null=True)
+    url = models.URLField()
+    urlToImage = models.URLField(blank=True, null=True)
+    published_at = models.DateTimeField()
+    summary = models.TextField(blank=True)
+    cryptos = models.ManyToManyField(CryptoCurrency, related_name='news')
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        # Visualizza i simboli associati
+        return f"{self.title} | {[c.symbol for c in self.cryptos.all()]}"

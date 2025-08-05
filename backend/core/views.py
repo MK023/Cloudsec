@@ -1,13 +1,30 @@
-from rest_framework import viewsets
-from .models import CryptoCurrency
-from .serializers import CryptoCurrencySerializer
+from rest_framework import viewsets, filters
+from .models import CryptoCurrency, News
+from .serializers import CryptoCurrencySerializer, NewsSerializer
 
 class CryptoCurrencyViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = CryptoCurrency.objects.all()
     serializer_class = CryptoCurrencySerializer
     lookup_field = 'symbol'  # Consente di usare /api/cryptos/BTC/
-    
-    
+
+class NewsViewSet(viewsets.ReadOnlyModelViewSet):
+    queryset = News.objects.prefetch_related('cryptos').order_by('-published_at')
+    serializer_class = NewsSerializer
+    filter_backends = [filters.SearchFilter, filters.OrderingFilter]
+    search_fields = ['title', 'summary', 'source', 'author', 'cryptos__symbol', 'cryptos__name']
+    ordering_fields = ['published_at', 'created_at']
+
+    def get_queryset(self):
+        qs = super().get_queryset()
+        crypto = self.request.query_params.get('crypto')
+        if crypto:
+            qs = qs.filter(cryptos__symbol__iexact=crypto)
+        date_from = self.request.query_params.get('from')
+        if date_from:
+            qs = qs.filter(published_at__gte=date_from)
+        return qs
+
+# La funzione healthz resta invariata
 from django.db import connections
 from django.db.utils import OperationalError
 from django.http import JsonResponse
@@ -18,14 +35,14 @@ import redis
 def healthz(request):
     db_ok = True
     redis_ok = True
+    
 
-    # Check PostgreSQL
     try:
         connections['default'].cursor()
     except OperationalError:
         db_ok = False
 
-    # Check Redis
+
     try:
         redis_url = settings.CELERY_BROKER_URL or settings.REDIS_URL or "redis://localhost:6379/0"
         r = redis.Redis.from_url(redis_url)

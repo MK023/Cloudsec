@@ -24,3 +24,7 @@ urlpatterns = [
     path('api/', include('core.api_urls')), # Include the API URLs from core app
     path('healthz/', views.healthz, name='healthz'), # Health check endpoint
 ]
+
+# Le rotte per le API delle crypto e delle news sono gestite in core/api_urls.py,
+# che ora include sia CryptoCurrencyViewSet che NewsViewSet registrati sul router DRF.
+# Non è necessaria alcuna modifica qui: la struttura delle URL è corretta e pronta per supportare entrambe le risorse.

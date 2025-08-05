@@ -1,5 +1,6 @@
 import logging
 import time
+import re
 from celery import shared_task, states
 from requests.exceptions import RequestException
 from django.utils import timezone
@@ -12,12 +13,20 @@ logger = logging.getLogger(__name__)
 register_shutdown_signal()
 
 BATCH_SIZE = getattr(settings, "COINGECKO_BATCH_SIZE", 100)
-BATCH_DELAY = getattr(settings, "COINGECKO_BATCH_DELAY", 2)
+BATCH_DELAY = getattr(settings, "COINGECKO_BATCH_DELAY", 10)
 VS_CURRENCY_LIST = getattr(settings, "COINGECKO_CURRENCIES", ["usd"])
 MAX_RETRIES = getattr(settings, "COINGECKO_MAX_RETRIES", 5)
 
+
+def is_valid_symbol(symbol):
+    return bool(re.match(r'^[A-Z0-9]{2,10}$', symbol))
+
 def _do_update_cryptos(update_state=None):
-    coingecko_ids = list(CryptoCurrency.objects.values_list('coingecko_id', flat=True))
+    coingecko_ids = list(
+        CryptoCurrency.objects.filter(
+            symbol__regex=r'^[A-Z0-9]{2,10}$'
+        ).values_list('coingecko_id', flat=True)
+    )
     if not coingecko_ids:
         logger.info("No cryptocurrencies to update.")
         return "No cryptocurrencies to update."
