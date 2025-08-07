@@ -285,6 +285,133 @@
 
 ---
 
+## 🏗️ Pipeline & DevOps: TUTTI I TIPI DA CONOSCERE
+
+### Test & Quality
+
+- **Unit test, Integration test, Functional test, Performance test**
+- **Code Coverage** (coverage.py, pytest-cov, codecov.io)
+- **Mutation testing** (mutmut, cosmic-ray)
+- **Smoke test** (test di base post-deploy)
+
+### Linting & Style
+
+- **Linting**: pylint, flake8, bandit, pyflakes
+- **Code Formatting**: black, isort, autopep8, yapf
+- **Type Checking**: mypy, pytype, pyright
+- **Docstring Linting**: pydocstyle
+
+### Sicurezza
+
+- **Static code analysis**: bandit, pyright, sonarqube, semgrep
+- **Dependency vulnerability scanning**: safety, pip-audit, snyk, osv-scanner
+- **Secret scanning**: trufflehog, gitleaks, GitHub Advanced Security
+- **Container scans**: trivy, grype, anchore
+- **Compliance checks**: checkov, terrascan (IaC security)
+
+### Commit & Pre-commit
+
+- **pre-commit**: framework per hook (lint, format, test, ecc)
+- **commit-msg hook**: validazione messaggi (semantic-release, commitizen)
+- **pre-push**: test rapidi, lint, check security prima del push
+
+### Build & Release
+
+- **Build/package**: setuptools, poetry, wheel, twine
+- **Release automation**: semantic-release, release-drafter
+- **Artifact checks**: verifica file generati, signature, hash
+
+### Documentation
+
+- **Doc build**: Sphinx, mkdocs, pdoc, docformatter
+- **API schemas**: OpenAPI/Swagger, ReDoc, FastAPI docs
+
+### Deploy & Infrastructure
+
+- **Containerization**: Docker, Podman
+- **Orchestration**: Kubernetes, Helm, Docker Compose, Nomad
+- **Infrastructure as Code**: Terraform, Pulumi, Ansible, SaltStack, CloudFormation
+- **Continuous Deployment**: GitHub Actions, GitLab CI, Jenkins, CircleCI, Travis, ArgoCD
+- **Monitoring & Logging**: Prometheus, Grafana, ELK, Loki, Sentry, Graylog, OpenTelemetry
+
+### Code Review & Collaboration
+
+- **Code review automation**: Danger, reviewdog, SonarCloud
+- **Pull Request checks**: lint, test, coverage, security, style
+- **License checking**: fossa, licensee, pip-licenses
+
+### Bonus
+
+- **Accessibility scans** (web): pa11y, axe-core, lighthouse
+- **SEO checks**: lighthouse
+- **Performance regression**: locust, k6, artillery
+
+---
+
+## 📚 Riferimenti, Studio & Community
+
+- **Python Institute** — Certificazioni ufficiali: [https://pythoninstitute.org/](https://pythoninstitute.org/)
+- **Real Python** — Tutorial avanzati: [https://realpython.com/](https://realpython.com/)
+- **Awesome Python** — Raccolta curated: [https://awesome-python.com/](https://awesome-python.com/)
+- **Full Stack Python** — Risorse pratiche: [https://www.fullstackpython.com/](https://www.fullstackpython.com/)
+- **PyVideo** — Talks conferenze: [https://pyvideo.org/](https://pyvideo.org/)
+- **Python Bytes Podcast**: [https://pythonbytes.fm/](https://pythonbytes.fm/)
+- **StackOverflow (Python tag)**: [https://stackoverflow.com/questions/tagged/python](https://stackoverflow.com/questions/tagged/python)
+- **Reddit**: r/Python, r/django, r/learnpython, r/dataengineering
+- **Dev.to**: [https://dev.to/t/python](https://dev.to/t/python)
+- **GitHub Topics**: [https://github.com/topics/python](https://github.com/topics/python)
+- **YouTube**: Corey Schafer, PyCon, Data School, ArjanCodes, Fireship, Sentdex
+
+---
+
+## 💡 Colloquio tecnico: Cosa preparare
+
+### Domande tipiche
+
+- **Domande base su Python**: tipi, OOP, gestione memoria, errori comuni
+- **Domande su framework**: Django ORM, signals, FastAPI dependencies, Flask blueprints
+- **Testing**: fixture, mock, parametrize, coverage, TDD
+- **DevOps**: continuous integration, differenze tra linter e formatter, containerizzazione, pipeline YAML
+- **Database**: ACID, transazioni, join, index, query optimization
+- **Security**: SQL injection, XSS, CSRF, JWT, OAuth2, best practice gestione segreti
+- **Cloud**: differenze tra servizi gestiti (S3 vs GCS), deployment, scaling, serverless
+- **Concurrency/Async**: thread, processi, async/await, GIL
+- **API**: status code, RESTful, OpenAPI, versioning, throttling
+- **Monitoring**: alert, tracing, logs, strumenti di analisi
+- **Soft skill**: teamwork, troubleshooting, gestione del tempo, feedback, leadership
+
+### Esercizi pratici
+
+- Implementare una API REST CRUD completa
+- Scrivere test con pytest, con mocking
+- Scrivere una pipeline CI/CD minima (GitHub Actions)
+- Ottimizzare una query SQL o un algoritmo (complessità Big O)
+- Debuggare uno script con bug logico
+
+### Consigli Extra
+
+- **Non improvvisare**: se non sai una cosa, dillo e ragiona ad alta voce
+- **Allena il pensiero algoritmico**: coding challenge su LeetCode, HackerRank, Codewars
+- **Prepara progetti da mostrare (GitHub, portfolio)**
+- **Cura la comunicazione (anche in inglese, se serve!)**
+
+---
+
+## 🎓 Bonus: Certificazioni e skill trasversali
+
+- **Python Institute (PCAP, PCPP, ecc)**
+- **AWS Certified (Cloud Practitioner, Developer, Data, ecc)**
+- **Google Cloud Certified**
+- **Certified Kubernetes Application Developer (CKAD)**
+- **Microsoft Azure Fundamentals**
+- **Scrum/Agile (PSM, CSM ecc)**
+- **Security: CompTIA Security+, Offensive Security, ecc**
+- **Linux Foundation Certified**
+- **Networking: Cisco CCNA**
+- **Data: Google Data Engineer, Databricks Certified, ecc**
+
+---
+
 ## 💼 Consigli per colloqui, studio e crescita professionale
 
 - **Sii sempre curioso e proattivo:**  
