@@ -1,6 +1,7 @@
 import requests
 from django.utils.dateparse import parse_datetime
-from ..models import News, CryptoCurrency
+from django.conf import settings
+from core.models import News, CryptoCurrency
 
 def match_cryptos_to_news(article, crypto_queryset):
     """
@@ -15,20 +16,22 @@ def match_cryptos_to_news(article, crypto_queryset):
     ]
     for crypto in crypto_queryset:
         for text in text_fields:
-            # Cerca sia il symbol che il name, case insensitive
             if crypto.symbol.lower() in text.lower() or crypto.name.lower() in text.lower():
                 matches.append(crypto)
                 break
     return matches
 
-def import_news_from_newsapi(api_key, query="crypto", page_size=20):
+def import_news_from_newsapi(query="crypto"):
     """
     1. Scarica le news da NewsAPI su un certo argomento.
     2. Per ogni news, cerca tutte le crypto menzionate nel testo.
     3. Crea la News e collega tutte le crypto trovate (relazione ManyToMany).
     4. Salta le news già esistenti (usa l'URL come chiave univoca).
     """
-    url = "https://newsapi.org/v2/everything"
+    url = settings.NEWSAPI_URL
+    api_key = settings.NEWSAPI_KEY
+    page_size = settings.NEWSAPI_PAGE_SIZE
+
     params = {
         "q": query,
         "pageSize": page_size,
@@ -48,16 +51,15 @@ def import_news_from_newsapi(api_key, query="crypto", page_size=20):
         if not matches:
             continue
 
-        # Evita i duplicati: controlla se la news esiste già usando l'URL
-        if News.objects.filter(url=article['url']).exists():
+        if News.objects.filter(url=article['url'][:200]).exists():
             continue
 
         news = News.objects.create(
             title=article.get('title', '')[:300],
             source=article.get('source', {}).get('name', '')[:100],
             author=article.get('author', '')[:100] if article.get('author') else None,
-            url=article['url'],
-            urlToImage=article.get('urlToImage'),
+            url=article.get('url', '')[:200],  # URLField default max_length=200
+            urlToImage=article.get('urlToImage', '')[:200] if article.get('urlToImage') else None,
             published_at=parse_datetime(article['publishedAt']),
             summary=article.get('description', ''),
         )
