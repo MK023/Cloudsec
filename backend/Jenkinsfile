@@ -1,10 +1,5 @@
 pipeline {
-    agent {
-        docker {
-            image 'python:3.11'
-            args '-u root:root'
-        }
-    }
+    agent any
     environment {
         DJANGO_SETTINGS_MODULE = 'core.settings'
         PYTHONUNBUFFERED = '1'
@@ -19,7 +14,7 @@ pipeline {
             steps {
                 sh '''
                     pip install --upgrade pip
-                    pip install -r ../requirements.txt
+                    pip install -r requirements.txt
                     pip install flake8 bandit pycodestyle safety black isort pre-commit
                 '''
             }
@@ -41,7 +36,7 @@ pipeline {
         }
         stage('Dependency security') {
             steps {
-                sh 'safety check -r ../requirements.txt'
+                sh 'safety check -r requirements.txt'
             }
         }
         stage('Black formatting') {
