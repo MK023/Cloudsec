@@ -160,7 +160,24 @@ services:
       - cloudsec_net
     restart: unless-stopped
 
+  #=====Jenkins CI=====#
+  jenkins:
+    image: jenkins/jenkins:lts
+    container_name: jenkins
+    ports:
+      - "8080:8080"
+    volumes:
+      - jenkins_home:/var/jenkins_home
+      - /var/run/docker.sock:/var/run/docker.sock
+      # Opzionale: buildare immagini dal container Jenkins!
+    environment:
+      JENKINS_OPTS: --prefix=/jenkins
+    networks:
+      - cloudsec_net
+    restart: unless-stopped
+
 #=====Definizione dei volumi persistenti CP=====#
 volumes:
   postgres_data:
   media_data:
+  jenkins_home:

@@ -22,7 +22,7 @@
 ### 🆕 Aggiornamenti recenti
 - **Aggiunto Flower** al docker-compose, ora monitorabile all'indirizzo [http://localhost:5555](http://localhost:5555)
 - **Aggiornato requirements.txt** per allineamento di tutte le dipendenze Python tra ambiente di sviluppo e produzione
-- **Schema servizi e porte locali documentato:**  
+- **Schema servizi e porte locali documentato:**
   | Servizio           | URL/Porta            | Descrizione                                   |
   |--------------------|----------------------|-----------------------------------------------|
   | **Django Backend** | [http://localhost:8000](http://localhost:8000) | API/Admin Django                              |
@@ -152,12 +152,12 @@ celery -A core beat -l info --scheduler django_celery_beat.schedulers:DatabaseSc
 
 ---
 
-🔥💥 **BOOM!**  
-Hai ora un'infrastruttura **pro** pronta per crescere: Django + Celery + Beat + Redis + PostgreSQL + Flower + React + Portainer orchestrati in Docker Compose!  
+🔥💥 **BOOM!**
+Hai ora un'infrastruttura **pro** pronta per crescere: Django + Celery + Beat + Redis + PostgreSQL + Flower + React + Portainer orchestrati in Docker Compose!
 🚀🚀🚀
 
-> **Per Copilot o altri collaboratori:**  
-> Riprendere da qui per sviluppo, test e debugging.  
+> **Per Copilot o altri collaboratori:**
+> Riprendere da qui per sviluppo, test e debugging.
 > **Tenere traccia degli step svolti e aggiornare questo documento dopo ogni milestone.**
 
 ---

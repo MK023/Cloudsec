@@ -1,6 +1,6 @@
-from django.urls import path, include
+from django.urls import include, path
 
 urlpatterns = [
     # ... altre route ...
-    path('', include('core.urls')),
+    path("", include("core.urls")),
 ]

@@ -7,21 +7,31 @@ class Migration(migrations.Migration):
 
     initial = True
 
-    dependencies = [
-    ]
+    dependencies = []
 
     operations = [
         migrations.CreateModel(
-            name='CryptoCurrency',
+            name="CryptoCurrency",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('coingecko_id', models.CharField(max_length=100, unique=True)),
-                ('symbol', models.CharField(max_length=20)),
-                ('name', models.CharField(max_length=100)),
-                ('price', models.DecimalField(blank=True, decimal_places=8, max_digits=20, null=True)),
-                ('price_change_24h', models.FloatField(blank=True, null=True)),
-                ('market_cap', models.BigIntegerField(blank=True, null=True)),
-                ('last_updated', models.DateTimeField(blank=True, null=True)),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("coingecko_id", models.CharField(max_length=100, unique=True)),
+                ("symbol", models.CharField(max_length=20)),
+                ("name", models.CharField(max_length=100)),
+                (
+                    "price",
+                    models.DecimalField(blank=True, decimal_places=8, max_digits=20, null=True),
+                ),
+                ("price_change_24h", models.FloatField(blank=True, null=True)),
+                ("market_cap", models.BigIntegerField(blank=True, null=True)),
+                ("last_updated", models.DateTimeField(blank=True, null=True)),
             ],
         ),
     ]

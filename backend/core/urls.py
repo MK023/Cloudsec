@@ -15,14 +15,14 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 
-from django.contrib import admin
-from django.urls import path, include
 from core import views
+from django.contrib import admin
+from django.urls import include, path
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
-    path('api/', include('core.api_urls')), # Include the API URLs from core app
-    path('healthz/', views.healthz, name='healthz'), # Health check endpoint
+    path("admin/", admin.site.urls),
+    path("api/", include("core.api_urls")),  # Include the API URLs from core app
+    path("healthz/", views.healthz, name="healthz"),  # Health check endpoint
 ]
 
 # Le rotte per le API delle crypto e delle news sono gestite in core/api_urls.py,

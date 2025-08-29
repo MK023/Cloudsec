@@ -6,23 +6,34 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('core', '0003_alter_cryptocurrency_symbol'),
+        ("core", "0003_alter_cryptocurrency_symbol"),
     ]
 
     operations = [
         migrations.CreateModel(
-            name='News',
+            name="News",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('title', models.CharField(max_length=300)),
-                ('source', models.CharField(max_length=100)),
-                ('author', models.CharField(blank=True, max_length=100, null=True)),
-                ('url', models.URLField()),
-                ('urlToImage', models.URLField(blank=True, null=True)),
-                ('published_at', models.DateTimeField()),
-                ('summary', models.TextField(blank=True)),
-                ('created_at', models.DateTimeField(auto_now_add=True)),
-                ('cryptos', models.ManyToManyField(related_name='news', to='core.cryptocurrency')),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("title", models.CharField(max_length=300)),
+                ("source", models.CharField(max_length=100)),
+                ("author", models.CharField(blank=True, max_length=100, null=True)),
+                ("url", models.URLField()),
+                ("urlToImage", models.URLField(blank=True, null=True)),
+                ("published_at", models.DateTimeField()),
+                ("summary", models.TextField(blank=True)),
+                ("created_at", models.DateTimeField(auto_now_add=True)),
+                (
+                    "cryptos",
+                    models.ManyToManyField(related_name="news", to="core.cryptocurrency"),
+                ),
             ],
         ),
     ]

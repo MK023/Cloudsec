@@ -6,13 +6,13 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('core', '0002_alter_cryptocurrency_coingecko_id_and_more'),
+        ("core", "0002_alter_cryptocurrency_coingecko_id_and_more"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='cryptocurrency',
-            name='symbol',
+            model_name="cryptocurrency",
+            name="symbol",
             field=models.CharField(max_length=128),
         ),
     ]

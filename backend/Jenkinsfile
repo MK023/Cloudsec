@@ -1,0 +1,88 @@
+pipeline {
+    agent {
+        docker {
+            image 'python:3.11'
+            args '-u root:root'
+        }
+    }
+    environment {
+        DJANGO_SETTINGS_MODULE = 'core.settings'
+        PYTHONUNBUFFERED = '1'
+    }
+    stages {
+        stage('Checkout') {
+            steps {
+                checkout scm
+            }
+        }
+        stage('Install dependencies') {
+            steps {
+                sh '''
+                    pip install --upgrade pip
+                    pip install -r ../requirements.txt
+                    pip install flake8 bandit pycodestyle safety black isort pre-commit
+                '''
+            }
+        }
+        stage('Lint code') {
+            steps {
+                sh 'flake8 backend --count --max-complexity=10 --max-line-length=127 --statistics'
+            }
+        }
+        stage('PEP8 Check') {
+            steps {
+                sh 'pycodestyle backend'
+            }
+        }
+        stage('Security checks') {
+            steps {
+                sh 'bandit -r backend'
+            }
+        }
+        stage('Dependency security') {
+            steps {
+                sh 'safety check -r ../requirements.txt'
+            }
+        }
+        stage('Black formatting') {
+            steps {
+                sh 'black --check backend'
+            }
+        }
+        stage('Isort import order') {
+            steps {
+                sh 'isort --check-only backend'
+            }
+        }
+        stage('Pre-commit checks') {
+            steps {
+                sh '''
+                    pre-commit install
+                    pre-commit run --all-files
+                '''
+            }
+        }
+        stage('Run migrations') {
+            steps {
+                sh 'python manage.py migrate'
+            }
+        }
+        stage('Collect static files') {
+            steps {
+                sh 'python manage.py collectstatic --noinput'
+            }
+        }
+        // stage('Run tests') {...} // aggiungi quando hai test!
+    }
+    post {
+        always {
+            echo 'Pipeline terminata'
+        }
+        success {
+            echo 'Build andata a buon fine!'
+        }
+        failure {
+            echo 'Errore nella build!'
+        }
+    }
+}

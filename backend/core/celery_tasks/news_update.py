@@ -1,8 +1,10 @@
 import logging
+
 from celery import shared_task
 from core.utils.news_importer import import_news_from_newsapi
 
 logger = logging.getLogger(__name__)
+
 
 @shared_task(name="core.celery_tasks.news_sync.update_news")
 def update_news(query="crypto"):

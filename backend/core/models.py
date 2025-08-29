@@ -1,5 +1,6 @@
 from django.db import models
 
+
 class CryptoCurrency(models.Model):
     coingecko_id = models.CharField(max_length=191, unique=True)
     symbol = models.CharField(max_length=128)
@@ -12,6 +13,7 @@ class CryptoCurrency(models.Model):
     def __str__(self):
         return f"{self.name} ({self.symbol})"
 
+
 class News(models.Model):
     title = models.CharField(max_length=300)
     source = models.CharField(max_length=100)
@@ -20,7 +22,7 @@ class News(models.Model):
     urlToImage = models.URLField(blank=True, null=True)
     published_at = models.DateTimeField()
     summary = models.TextField(blank=True)
-    cryptos = models.ManyToManyField(CryptoCurrency, related_name='news')
+    cryptos = models.ManyToManyField(CryptoCurrency, related_name="news")
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):

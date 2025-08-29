@@ -1,7 +1,8 @@
 import requests
-from django.utils.dateparse import parse_datetime
+from core.models import CryptoCurrency, News
 from django.conf import settings
-from core.models import News, CryptoCurrency
+from django.utils.dateparse import parse_datetime
+
 
 def match_cryptos_to_news(article, crypto_queryset):
     """
@@ -10,9 +11,9 @@ def match_cryptos_to_news(article, crypto_queryset):
     """
     matches = []
     text_fields = [
-        article.get('title', ''),
-        article.get('description', ''),
-        article.get('content', ''),
+        article.get("title", ""),
+        article.get("description", ""),
+        article.get("content", ""),
     ]
     for crypto in crypto_queryset:
         for text in text_fields:
@@ -20,6 +21,7 @@ def match_cryptos_to_news(article, crypto_queryset):
                 matches.append(crypto)
                 break
     return matches
+
 
 def import_news_from_newsapi(query="crypto"):
     """
@@ -51,17 +53,17 @@ def import_news_from_newsapi(query="crypto"):
         if not matches:
             continue
 
-        if News.objects.filter(url=article['url'][:200]).exists():
+        if News.objects.filter(url=article["url"][:200]).exists():
             continue
 
         news = News.objects.create(
-            title=article.get('title', '')[:300],
-            source=article.get('source', {}).get('name', '')[:100],
-            author=article.get('author', '')[:100] if article.get('author') else None,
-            url=article.get('url', '')[:200],  # URLField default max_length=200
-            urlToImage=article.get('urlToImage', '')[:200] if article.get('urlToImage') else None,
-            published_at=parse_datetime(article['publishedAt']),
-            summary=article.get('description', ''),
+            title=article.get("title", "")[:300],
+            source=article.get("source", {}).get("name", "")[:100],
+            author=article.get("author", "")[:100] if article.get("author") else None,
+            url=article.get("url", "")[:200],  # URLField default max_length=200
+            urlToImage=(article.get("urlToImage", "")[:200] if article.get("urlToImage") else None),
+            published_at=parse_datetime(article["publishedAt"]),
+            summary=article.get("description", ""),
         )
         news.cryptos.set(matches)
         created_count += 1
