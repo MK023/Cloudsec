@@ -1,4 +1,4 @@
-## Stato al 2025-08-01
+## Stato al 2025-08-29
 
 ### ✅ Componenti attivi e aggiornati
 - **Frontend (React):** accessibile su [http://localhost:3002](http://localhost:3002) (modalità sviluppo, webpack funzionante)
@@ -7,8 +7,10 @@
 - **Celery Beat:** attivo, schedula task periodici (es: update_cryptos)
 - **Redis:** usato come message broker per Celery
 - **Flower:** dashboard attiva su [http://localhost:5555](http://localhost:5555) per monitoraggio Celery/Beat/Worker
-- **Portainer:** attivo per gestione container Docker su porta dedicata (se attivo)
+- **Portainer:** attivo per gestione container Docker su porta dedicata (se attivo, [http://localhost:9000](http://localhost:9000))
 - **Docker Compose:** orchestrazione di tutti i servizi, con rete dedicata e volumi persistenti
+- **Jenkins CI:** attivo e ora integrato in Docker Compose, pipeline funzionante per build automatizzata (fix checkout scm, step test e build configurabili)
+- **Ngrok:** tunnel automatico per Jenkins incluso in Docker Compose, URL pubblico generato all'avvio per ricevere webhook esterni
 
 ### ✅ Funzionalità testate
 - **Migrazioni Django:** tabella `core_cryptocurrency` creata e aggiornata correttamente
@@ -18,9 +20,22 @@
   - Task schedulato correttamente con Celery Beat, funziona sia manualmente che in automatico
 - **Monitoraggio Flower:** controlla lo stato dei task, dei worker e delle code in tempo reale
 - **Frontend React:** collegato e funzionante, pronto per consumare le API backend
+- **Pipeline Jenkins:** build automatica avviata con successo, step di checkout, build e test integrabili
+- **Ngrok:** tunnel attivo e funzionante, URL pubblico accessibile per i webhook (visualizzabile con `docker logs ngrok`)
+- **Lintering Python:** configurato con **Black**, **Flake8**, **isort**, **pre-commit** per garantire qualità del codice e formattazione automatica
 
 ### 🆕 Aggiornamenti recenti
-- **Aggiunto Flower** al docker-compose, ora monitorabile all'indirizzo [http://localhost:5555](http://localhost:5555)
+- **Aggiunto Jenkins CI** come servizio Docker Compose, ora build e pipeline gestite automaticamente
+  - **Fixato errore checkout scm:** ora il Jenkinsfile viene letto dal repository Git tramite "Pipeline script from SCM" e la build parte correttamente.
+  - **Pipeline testabile:** puoi aggiungere step di test, lint, ecc. direttamente nel Jenkinsfile.
+- **Aggiunto Ngrok** come servizio Docker Compose per esporre Jenkins a webhook esterni, token configurato
+- **Aggiunto Portainer** come servizio Docker Compose ([http://localhost:9000](http://localhost:9000)), gestione container semplificata
+- **Aggiunto lintering Python**:
+  - **Black** per formattazione automatica
+  - **Flake8** per controllo stile e errori
+  - **isort** per ordinamento import
+  - **pre-commit** con hook per eseguire linting prima dei commit
+- **Aggiornato docker-compose.yml**: tutti i servizi (backend, frontend, celery, beat, flower, postgres, redis, dbeaver, jenkins, ngrok, portainer) con rete dedicata, healthcheck, volumi persistenti
 - **Aggiornato requirements.txt** per allineamento di tutte le dipendenze Python tra ambiente di sviluppo e produzione
 - **Schema servizi e porte locali documentato:**
   | Servizio           | URL/Porta            | Descrizione                                   |
@@ -30,14 +45,48 @@
   | **Flower**         | [http://localhost:5555](http://localhost:5555) | Dashboard Celery/Beat/Worker                  |
   | **PostgreSQL**     | `localhost:5432`     | Database PostgreSQL (solo client esterni)      |
   | **Redis**          | `localhost:6379`     | Broker Celery (solo client esterni)           |
+  | **Jenkins CI**     | [http://localhost:8080](http://localhost:8080) | Build server e CI/CD                          |
+  | **Ngrok**          | `URL pubblico dinamico` | Tunnel per Jenkins (vedi sotto)              |
+  | **Portainer**      | [http://localhost:9000](http://localhost:9000) | Gestione container Docker                     |
 
 ### 📝 Note operative
 - Tutti i servizi Docker Compose sono **UP** e collegati sulla rete `cloudsec_net`
 - Healthcheck attivi per backend, postgres, redis, celery
-- Volumi persistenti per dati db e media
+- Volumi persistenti per dati db, media e portainer
 - Portainer attivo, warning encryption key ignorabile in dev
 - Log Celery, Django e Beat senza errori
+- **Ngrok:** ogni riavvio genera nuovo URL, copiarlo nei webhook esterni se serve
+- **Come trovare il link pubblico di Ngrok:**
+  - Dopo aver avviato i servizi (`docker compose up -d`), recupera il link pubblico con:
+    ```bash
+    docker logs ngrok
+    ```
+    Cerca la riga tipo:
+    ```
+    Forwarding https://qualcosa.ngrok.io -> http://jenkins:8080
+    ```
+    Usa questo URL per configurare i webhook (es: GitHub) che devono comunicare con Jenkins.
 - **Best practice:** ogni aggiornamento ai pacchetti → aggiornare `requirements.txt` con `pip freeze > requirements.txt`
+- **Jenkins:** pipeline pronta, step di test e deploy aggiungibili nel Jenkinsfile
+- **Linting Python:**
+  - Installa i tool necessari:
+    ```bash
+    pip install black flake8 isort pre-commit
+    pre-commit install
+    ```
+  - Esegui linting/formattazione dell’intero progetto:
+    ```bash
+    black .
+    isort .
+    flake8 .
+    pre-commit run --all-files
+    ```
+  - Integra i tool in VSCode tramite le estensioni consigliate:
+    - **Python** (ufficiale)
+    - **Black Formatter**
+    - **Flake8 Linter**
+    - **isort**
+    - **Pre-commit** (opzionale)
 
 ---
 
@@ -147,13 +196,19 @@ celery -A core worker -l info --pool=solo
 
 # Avvia Celery Beat (scheduler periodico)
 celery -A core beat -l info --scheduler django_celery_beat.schedulers:DatabaseScheduler
+
+# Linting e formattazione Python
+black .
+isort .
+flake8 .
+pre-commit run --all-files
 ```
 > 🔹 Sostituisci `core` con il nome della tua app Celery principale se differente.
 
 ---
 
 🔥💥 **BOOM!**
-Hai ora un'infrastruttura **pro** pronta per crescere: Django + Celery + Beat + Redis + PostgreSQL + Flower + React + Portainer orchestrati in Docker Compose!
+Hai ora un'infrastruttura **pro** pronta per crescere: Django + Celery + Beat + Redis + PostgreSQL + Flower + React + Jenkins + Ngrok + Portainer orchestrati in Docker Compose!
 🚀🚀🚀
 
 > **Per Copilot o altri collaboratori:**
