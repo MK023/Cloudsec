@@ -213,6 +213,36 @@
 - **python-dotenv**
   [https://saurabh-kumar.com/python-dotenv/](https://saurabh-kumar.com/python-dotenv/)
 
+### DevSecOps & Vulnerabilità (Container, IaC, Secrets, Code Quality)
+
+- **Trivy**
+  [https://aquasecurity.github.io/trivy/](https://aquasecurity.github.io/trivy/)
+  Scanner all-in-one per vulnerabilità di container, filesystem, repository, file IaC (Terraform, CloudFormation, Kubernetes YAML), dipendenze, immagini Docker.
+- **Grype**
+  [https://github.com/anchore/grype](https://github.com/anchore/grype)
+  Scanner di immagini container per vulnerabilità (supporta Docker, OCI, Podman). Utilissimo in CI/CD.
+- **Dockle**
+  [https://github.com/goodwithtech/dockle](https://github.com/goodwithtech/dockle)
+  Linter di sicurezza e best practice per Dockerfile e immagini container.
+- **Checkov**
+  [https://www.checkov.io/](https://www.checkov.io/)
+  Static code analysis security per IaC: Terraform, CloudFormation, Kubernetes, Azure ARM, Dockerfile. Ottimo per policy custom e CI/CD.
+- **tfsec**
+  [https://aquasecurity.github.io/tfsec/](https://aquasecurity.github.io/tfsec/)
+  SAST per Terraform: analisi sicurezza e best practice.
+- **SonarQube**
+  [https://www.sonarsource.com/products/sonarqube/](https://www.sonarsource.com/products/sonarqube/)
+  Analisi qualità del codice, static analysis, technical debt, vulnerabilità (supporta molti linguaggi, plugin security).
+- **OWASP ZAP**
+  [https://www.zaproxy.org/](https://www.zaproxy.org/)
+  DAST open source per web app: proxy, scanner vulnerabilità, automazione, integrazione pipeline.
+- **Burp Suite**
+  [https://portswigger.net/burp](https://portswigger.net/burp)
+  Standard de-facto nel pentest web: proxy, scanner, intruder, repeater, automazione.
+- **Vault (HashiCorp)**
+  [https://www.vaultproject.io/](https://www.vaultproject.io/)
+  Gestione sicura e centralizzata di segreti, token, password, chiavi API, cifratura (integrabile con cloud, CI/CD).
+
 ### Monitoring, Logging & Tracing
 
 - **Prometheus (client_python)**
@@ -454,3 +484,5 @@
   30 secondi per presentarti in modo chiaro: chi sei, cosa sai fare, cosa cerchi e cosa puoi offrire.
 - **Continua a studiare e a certificarti:**
   Le certificazioni (vedi [Python Institute](https://pythoninstitute.org/))
+
+---

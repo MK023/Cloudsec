@@ -13,7 +13,7 @@ click-repl==0.3.0
 colorama==0.4.6
 cron-descriptor==1.4.5
 distlib==0.4.0
-Django==4.2.23
+Django>=4.2.24
 django-celery-beat==2.8.1
 django-cors-headers==4.7.0
 django-timezone-field==7.1

@@ -7,7 +7,7 @@ networks:
 
 services:
   postgres:
-    image: postgres:16-alpine
+    image: postgres:16.3-alpine
     container_name: postgres
     environment:
       POSTGRES_DB: cloudsec
@@ -27,7 +27,7 @@ services:
       - cloudsec_net
 
   redis:
-    image: redis:7.2-alpine
+    image: redis:7.2.4-alpine
     container_name: redis
     command: redis-server --maxmemory 25mb --maxmemory-policy allkeys-lru
     ports:
@@ -128,7 +128,7 @@ services:
       - cloudsec_net
 
   flower:
-    image: mher/flower:latest
+    image: mher/flower:2.0.1
     container_name: flower
     command: celery --broker=redis://redis:6379/0 flower --port=5555
     environment:
@@ -144,7 +144,7 @@ services:
       - cloudsec_net
 
   dbeaver:
-    image: dbeaver/cloudbeaver:latest
+    image: dbeaver/cloudbeaver:24.1.0
     container_name: dbeaver
     ports:
       - "8978:8978"
@@ -158,7 +158,7 @@ services:
     build:
       context: .
       dockerfile: Dockerfile.jenkins
-    image: my-jenkins:latest
+    image: jenkins/jenkins:lts
     container_name: jenkins
     ports:
       - "8080:8080"
@@ -172,7 +172,7 @@ services:
     restart: unless-stopped
 
   docker-agent:
-    image: jenkins/inbound-agent:latest
+    image: jenkins/inbound-agent:3206.vb_15dcf73f6a_9-1
     container_name: docker-agent
     environment:
       - JENKINS_URL=http://jenkins:8080/jenkins/
@@ -188,7 +188,7 @@ services:
     restart: unless-stopped
 
   watchtower:
-    image: containrrr/watchtower
+    image: containrrr/watchtower:1.7.1
     container_name: watchtower
     restart: unless-stopped
     volumes:
