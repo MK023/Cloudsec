@@ -1,5 +1,24 @@
 FROM jenkins/jenkins:lts
+
 USER root
-RUN apt-get update && apt-get install -y docker.io \
-    && usermod -aG docker jenkins
+
+RUN apt-get update && \
+    apt-get install -y docker.io && \
+    usermod -aG docker jenkins
+
+RUN jenkins-plugin-cli --plugins \
+    docker-plugin \
+    docker-workflow \
+    github \
+    github-branch-source \
+    git \
+    pipeline-stage-view \
+    blueocean \
+    ansicolor \
+    timestamper \
+    credentials-binding \
+    email-ext \
+    slack \
+    ws-cleanup
+
 USER jenkins

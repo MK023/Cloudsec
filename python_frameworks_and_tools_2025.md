@@ -1,4 +1,4 @@
-# 📚 Python: Framework, Librerie & Tool più richiesti nel 2025
+# 📚 Python: Framework, Librerie & Tool 2025
 
 **Sviluppo professionale, AI/ML, Data, Web, DevOps, Test, Database, Sicurezza, Monitoring, Grafici, Obfuscation, Cloud, Messaging, API, IaC, Automazione**
 
@@ -145,6 +145,24 @@
   [https://developer.hashicorp.com/terraform/docs](https://developer.hashicorp.com/terraform/docs)
   IaC per gestire infrastrutture cloud, VM, networking, risorse.
   - **python-terraform**: [https://github.com/beelit94/python-terraform](https://github.com/beelit94/python-terraform) (wrapper Python per Terraform)
+  - **Quando si usa**: Quando vuoi automatizzare, versionare e replicare infrastrutture (cloud, VM, networking, servizi gestiti) tramite codice. Indispensabile in ambienti DevOps, Cloud, CI/CD, multi-cloud.
+  - **Comandi base**:
+    - `terraform init` (inizializza progetto)
+    - `terraform plan` (mostra modifiche che verranno applicate)
+    - `terraform apply` (applica le modifiche)
+    - `terraform destroy` (elimina risorse)
+    - `terraform validate` (verifica sintassi config)
+    - `terraform state` (gestione stato)
+    - `terraform import` (importa risorse già esistenti)
+    - `terraform output` (valori di output)
+  - **Cosa puoi gestire**: AWS, GCP, Azure, OCI, Kubernetes, Docker, VMware, e centinaia di altri provider.
+  - **State file**: Tiene traccia dello stato dell’infrastruttura. Attenzione a backup e gestione collaborativa!
+  - **Utilità**:
+    - Replica ambienti (dev, test, prod)
+    - Evita errori manuali
+    - Perfetto per infrastrutture scalabili, cloud-native, microservizi
+    - Integrabile con pipeline CI/CD e test automatici
+
 - **Ansible**
   [https://docs.ansible.com/](https://docs.ansible.com/)
   Automazione di provisioning, configurazione e deployment.
@@ -435,21 +453,4 @@
 - **Prepara un elevator pitch sulla tua esperienza:**
   30 secondi per presentarti in modo chiaro: chi sei, cosa sai fare, cosa cerchi e cosa puoi offrire.
 - **Continua a studiare e a certificarti:**
-  Le certificazioni (vedi [Python Institute](https://pythoninstitute.org/)) sono apprezzate dai recruiter, soprattutto per ruoli internazionali.
-- **Sii aggiornato sulle tendenze:**
-  Segui newsletter, canali YouTube, podcast, conferenze anche online. Sapere cosa è hot (es. AI, DevOps, Cloud, Security, Data) fa la differenza.
-- **Non sottovalutare le basi:**
-  Un solido grounding in algoritmi, strutture dati, networking e sicurezza ti permetterà di affrontare anche le tecnologie più avanzate.
-
----
-
-## ✨ Citazione motivazionale
-
-> “Non è la specie più forte a sopravvivere, né la più intelligente, ma quella più reattiva ai cambiamenti.”
-> — Charles Darwin
-
----
-
-**Buono studio, buona codifica e… Keep pushing forward!** 🚀
-Se ti serve aiuto, torna qui: la community (e Copilot!) non dorme mai.
-MK023 & Copilot 🤖
+  Le certificazioni (vedi [Python Institute](https://pythoninstitute.org/))

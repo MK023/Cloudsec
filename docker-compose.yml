@@ -1,11 +1,11 @@
-version: '3.8'
+version: "3.8"
+
 networks:
   cloudsec_net:
     name: cloudsec_net
     driver: bridge
 
 services:
-  #=====Database PostgreSQL=====#
   postgres:
     image: postgres:16-alpine
     container_name: postgres
@@ -17,7 +17,7 @@ services:
       - postgres_data:/var/lib/postgresql/data
     restart: unless-stopped
     ports:
-      - "5432:5432"
+      - "5433:5432"
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U cloudsec"]
       interval: 10s
@@ -26,7 +26,6 @@ services:
     networks:
       - cloudsec_net
 
-  #=====Redis (Broker Celery)=====#
   redis:
     image: redis:7.2-alpine
     container_name: redis
@@ -42,7 +41,6 @@ services:
     networks:
       - cloudsec_net
 
-  #=====Backend Django=====#
   backend:
     build:
       context: ./backend
@@ -71,7 +69,6 @@ services:
     networks:
       - cloudsec_net
 
-  #=====Celery Worker=====#
   celery:
     build:
       context: ./backend
@@ -95,7 +92,6 @@ services:
     networks:
       - cloudsec_net
 
-  #=====Celery Beat=====#
   celery-beat:
     build:
       context: ./backend
@@ -114,7 +110,6 @@ services:
     networks:
       - cloudsec_net
 
-  #=====Frontend React=====#
   frontend:
     build:
       context: ./frontend
@@ -132,7 +127,6 @@ services:
     networks:
       - cloudsec_net
 
-  #=====Flower (Celery Monitoring)=====#
   flower:
     image: mher/flower:latest
     container_name: flower
@@ -149,7 +143,6 @@ services:
     networks:
       - cloudsec_net
 
-  #=====DBeaver Web (CloudBeaver)=====#
   dbeaver:
     image: dbeaver/cloudbeaver:latest
     container_name: dbeaver
@@ -161,51 +154,54 @@ services:
       - cloudsec_net
     restart: unless-stopped
 
-  #=====Jenkins CI=====#
   jenkins:
     build:
       context: .
       dockerfile: Dockerfile.jenkins
+    image: my-jenkins:latest
     container_name: jenkins
     ports:
       - "8080:8080"
     volumes:
       - jenkins_home:/var/jenkins_home
-      - //var/run/docker.sock:/var/run/docker.sock
+      - /var/run/docker.sock:/var/run/docker.sock
     environment:
       JENKINS_OPTS: --prefix=/jenkins
     networks:
       - cloudsec_net
     restart: unless-stopped
 
-  #=====Ngrok tunnel per Jenkins=====#
-  ngrok:
-    image: ngrok/ngrok:latest
-    container_name: ngrok
-    command: http jenkins:8080
+  docker-agent:
+    image: jenkins/inbound-agent:latest
+    container_name: docker-agent
     environment:
-      NGROK_AUTHTOKEN: "31xOW07xlymJyDLXYIjj1KVzYxZ_5jjRFFneVSwgmpqT7S73h"
+      - JENKINS_URL=http://jenkins:8080/jenkins/
+      - JENKINS_AGENT_NAME=docker-agent
+      - JENKINS_SECRET=7d5674a71f80258dd625a993cdb7cdeedded7ade387d912765c3349538209268
+      - JENKINS_AGENT_WORKDIR=/home/jenkins/agent
+    volumes:
+      - agent_home:/home/jenkins/agent
     depends_on:
       - jenkins
     networks:
       - cloudsec_net
-
-  #=====Portainer (Gestione Docker)=====#
-  portainer:
-    image: portainer/portainer-ce:latest
-    container_name: portainer
     restart: unless-stopped
-    ports:
-      - "9000:9000"
+
+  watchtower:
+    image: containrrr/watchtower
+    container_name: watchtower
+    restart: unless-stopped
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
-      - portainer_data:/data
+    environment:
+      - WATCHTOWER_CLEANUP=true
+      - WATCHTOWER_POLL_INTERVAL=86400
     networks:
       - cloudsec_net
 
-#=====Definizione dei volumi persistenti=====#
 volumes:
   postgres_data:
   media_data:
   jenkins_home:
   portainer_data:
+  agent_home:

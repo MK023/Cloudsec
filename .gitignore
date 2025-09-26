@@ -71,3 +71,7 @@ portainer_data/
 *.secret
 *.bak
 *.orig
+*.tmp
+*.swp
+*.media
+*.log

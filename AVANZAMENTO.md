@@ -45,7 +45,7 @@
   | **Flower**         | [http://localhost:5555](http://localhost:5555) | Dashboard Celery/Beat/Worker                  |
   | **PostgreSQL**     | `localhost:5432`     | Database PostgreSQL (solo client esterni)      |
   | **Redis**          | `localhost:6379`     | Broker Celery (solo client esterni)           |
-  | **Jenkins CI**     | [http://localhost:8080](http://localhost:8080) | Build server e CI/CD                          |
+  | **Jenkins CI**     | [http://localhost:8080/jenkins/](http://localhost:8080) | Build server e CI/CD                          |
   | **Ngrok**          | `URL pubblico dinamico` | Tunnel per Jenkins (vedi sotto)              |
   | **Portainer**      | [http://localhost:9000](http://localhost:9000) | Gestione container Docker                     |
 

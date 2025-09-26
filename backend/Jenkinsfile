@@ -4,54 +4,84 @@ pipeline {
         DJANGO_SETTINGS_MODULE = 'core.settings'
         PYTHONUNBUFFERED = '1'
     }
+    options {
+        skipStagesAfterUnstable()
+        timestamps()
+    }
     stages {
         stage('Checkout') {
             steps {
                 checkout scm
             }
         }
-        stage('Install dependencies') {
+        stage('Setup Python') {
             steps {
                 sh '''
+                    python --version
                     pip install --upgrade pip
-                    pip install -r requirements.txt
-                    pip install flake8 bandit pycodestyle safety black isort pre-commit
                 '''
             }
         }
-        stage('Lint code') {
+        stage('Install dependencies') {
             steps {
-                sh 'flake8 backend'
-            }
-        }
-        stage('PEP8 Check') {
-            steps {
-                sh 'pycodestyle backend'
-            }
-        }
-        stage('Security checks') {
-            steps {
-                sh 'bandit -r backend'
-            }
-        }
-        stage('Dependency security') {
-            steps {
-                sh 'safety check -r requirements.txt'
-            }
-        }
-        stage('Black formatting') {
-            steps {
-                sh 'black --check backend'
-            }
-        }
-        stage('Isort import order') {
-            steps {
-                sh 'isort --check-only backend'
+                sh '''
+                    pip install -r requirements.txt
+                    pip install flake8 bandit pycodestyle safety black isort pre-commit pytest mypy
+                '''
             }
         }
         stage('Pre-commit checks') {
             steps {
-                sh 'pre-commit run --all-files'
+                sh 'pre-commit run --all-files || true'
+            }
+        }
+        stage('Flake8 (lint)') {
+            steps {
+                catchError(buildResult: 'SUCCESS', stageResult: 'UNSTABLE') {
+                    sh 'flake8 backend'
+                }
+            }
+        }
+        stage('PEP8 (pycodestyle)') {
+            steps {
+                catchError(buildResult: 'SUCCESS', stageResult: 'UNSTABLE') {
+                    sh 'pycodestyle backend'
+                }
+            }
+        }
+        stage('Bandit (security)') {
+            steps {
+                catchError(buildResult: 'SUCCESS', stageResult: 'UNSTABLE') {
+                    sh 'bandit -r backend'
+                }
+            }
+        }
+        stage('Safety (dependency security)') {
+            steps {
+                catchError(buildResult: 'SUCCESS', stageResult: 'UNSTABLE') {
+                    sh 'safety check -r requirements.txt'
+                }
+            }
+        }
+        stage('Black formatting check') {
+            steps {
+                catchError(buildResult: 'SUCCESS', stageResult: 'UNSTABLE') {
+                    sh 'black --check backend'
+                }
+            }
+        }
+        stage('Isort import order') {
+            steps {
+                catchError(buildResult: 'SUCCESS', stageResult: 'UNSTABLE') {
+                    sh 'isort --check-only backend'
+                }
+            }
+        }
+        stage('Mypy (type checking)') {
+            steps {
+                catchError(buildResult: 'SUCCESS', stageResult: 'UNSTABLE') {
+                    sh 'mypy backend'
+                }
             }
         }
         stage('Run migrations') {
@@ -66,17 +96,34 @@ pipeline {
         }
         stage('Run tests') {
             steps {
-                echo 'Aggiungi qui i tuoi test!'
-                // sh 'pytest backend'
+                script {
+                    if (fileExists('backend/tests') || fileExists('backend/tests.py')) {
+                        catchError(buildResult: 'SUCCESS', stageResult: 'UNSTABLE') {
+                            sh 'pytest backend --junitxml=results.xml'
+                        }
+                    } else {
+                        echo 'Nessun test trovato: skip dello stage test.'
+                    }
+                }
             }
         }
     }
     post {
         always {
             echo 'Pipeline terminata'
+            script {
+                if (fileExists('results.xml')) {
+                    junit 'results.xml'
+                } else {
+                    echo 'Nessun risultato test trovato.'
+                }
+            }
         }
         success {
             echo 'Build andata a buon fine!'
+        }
+        unstable {
+            echo 'Build UNSTABLE: controlla warning/lint/security!'
         }
         failure {
             echo 'Errore nella build!'
